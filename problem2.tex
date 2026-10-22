@@ -1,0 +1,284 @@
+We define the vector of decision variables as:
+\[
+X = \begin{pmatrix}
+x_{11} & x_{12} & x_{13} & x_{21} & x_{22} & x_{23} & x_{31} & x_{32} & x_{33} &
+y_1 & y_2 & y_3 & r_1 & r_2 & r_3 & c_1 & c_2 & c_3
+\end{pmatrix}^{\!\top}.
+\]
+where \(x_{ij}\) represents the quantity shipped from distribution center
+\(\mathrm{DC}_i\) to city \(j\). We assume that \(x_{i1}\) corresponds to Grenoble, \(x_{i2}\) to Lyon, and
+\(x_{i3}\) to Valence.
+
+\subsubsection{Objective function}
+
+The objective is to minimize the total cost, which includes transportation,
+labor, and inventory costs, as well as penalties related to carbon emissions
+and renewable energy use.
+
+The transportation cost is:
+\[
+C_{\mathrm{transport}} =
+4x_{11} + 5x_{12} + 6x_{13}
++ 7x_{21} + 8x_{22} + 9x_{23}
++ 10x_{31} + 11x_{32} + 12x_{33}.
+\]
+
+The labor cost is:
+\[
+C_{\mathrm{labor}} = 20y_1 + 22y_2 + 25y_3.
+\]
+
+The inventory cost is:
+\[
+C_{\mathrm{inventory}} =
+0.10\,(x_{11} + x_{12} + x_{13})
++ 0.20\,(x_{21} + x_{22} + x_{23})
++ 0.30\,(x_{31} + x_{32} + x_{33}).
+\]
+
+The penalty associated with carbon emissions is:
+\[
+C_{\mathrm{carbon}} = 50\,(c_1 + c_2 + c_3).
+\]
+
+Finally, the cost associated with renewable energy is:
+\[
+C_{\mathrm{renewable}} = 10\,(r_1 + r_2 + r_3).
+\]
+
+The objective function is therefore written as:
+\[
+\boxed{
+\begin{aligned}
+\min \quad Z ={}& C_{\mathrm{transport}} + C_{\mathrm{labor}} + C_{\mathrm{inventory}}
++ C_{\mathrm{carbon}} + C_{\mathrm{renewable}} \\
+={}& 4x_{11} + 5x_{12} + 6x_{13} + 7x_{21} + 8x_{22} + 9x_{23}
++ 10x_{31} + 11x_{32} + 12x_{33} \\
+&+ 20y_1 + 22y_2 + 25y_3 \\
+&+ 0.10\,(x_{11} + x_{12} + x_{13})
++ 0.20\,(x_{21} + x_{22} + x_{23})
++ 0.30\,(x_{31} + x_{32} + x_{33}) \\
+&+ 50\,(c_1 + c_2 + c_3) + 10\,(r_1 + r_2 + r_3).
+\end{aligned}
+}
+\]
+
+The objective function can be written as:\(Z(X) = f^{\top} X\), avec
+\[
+f = \begin{pmatrix}
+\underbrace{4 \;\; 5 \;\; 6 \;\; 7 \;\; 8 \;\; 9 \;\; 10 \;\; 11 \;\; 12}_{x}
+\;\; \underbrace{20 \;\; 22 \;\; 25}_{y}
+\;\; \underbrace{10 \;\; 10 \;\; 10}_{r}
+\;\; \underbrace{50 \;\; 50 \;\; 50}_{c}
+\end{pmatrix}^{\!\top}.
+\]
+
+
+\subsubsection{Capacity constraints}
+
+The maximum capacities of the three distribution centers are
+\(2000\), \(2500\), and \(3000\) units, respectively. The constraints
+are therefore written as:
+\[
+\begin{aligned}
+x_{11} + x_{12} + x_{13} &\leq 2000, \\
+x_{21} + x_{22} + x_{23} &\leq 2500, \\
+x_{31} + x_{32} + x_{33} &\leq 3000.
+\end{aligned}
+\]
+
+In matrix form, these constraints are written as:
+\[
+A_{\mathrm{cap}}\, X \leq b_{\mathrm{cap}},
+\]
+with
+\[
+A_{\mathrm{cap}} =
+\begin{bmatrix}
+1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \cdots & 0 \\
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & \cdots & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 0 & \cdots & 0
+\end{bmatrix}
+ and
+\quad
+b_{\mathrm{cap}} =
+\begin{bmatrix}
+2000 \\ 2500 \\ 3000
+\end{bmatrix}.
+\]
+
+\subsubsection{Demand satisfaction constraints}
+
+The demands of the three cities are expressed by:
+\[
+\begin{aligned}
+x_{11} + x_{21} + x_{31} &= 1500, \\
+x_{12} + x_{22} + x_{32} &= 1000, \\
+x_{13} + x_{23} + x_{33} &= 1200.
+\end{aligned}
+\]
+
+In matrix form, these constraints are written as:
+\[
+A_{\mathrm{dem}}\, X = b_{\mathrm{dem}},
+\]
+with
+\[
+A_{\mathrm{dem}}  =
+\begin{bmatrix}
+1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \cdots & 0 \\
+0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \cdots & 0 \\
+0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \cdots & 0
+\end{bmatrix}
+\quad \text{and} \quad
+b_{\mathrm{dem}} =
+\begin{bmatrix}
+1500 \\ 1000 \\ 1200
+\end{bmatrix}.
+\]
+
+\subsubsection{Working hours constraints}
+
+The working hour limits are:
+\[
+y_1 \leq 45, \qquad y_2 \leq 55, \qquad y_3 \leq 50,
+\]
+
+That s mean :
+\[
+A_{\mathrm{lab}}\, X \leq b_{\mathrm{lab}},
+\]
+with
+A_{\mathrm{lab}} =
+\begin{bmatrix}
+0 & \cdots & 0 & 1 & 0 & 0 & 0 & \cdots & 0 \\
+0 & \cdots & 0 & 0 & 1 & 0 & 0 & \cdots & 0 \\
+0 & \cdots & 0 & 0 & 0 & 1 & 0 & \cdots & 0
+\end{bmatrix}
+\]
+and 
+\[
+b_{\mathrm{lab}} =
+\begin{pmatrix}
+45 \\ 55 \\ 50
+\end{pmatrix}.
+\]
+
+\subsubsection{Renewable energy constraints}
+
+The total amount of renewable energy used must be
+greater than or equal to \(1000\) kWh:
+\[
+\boxed{r_1 + r_2 + r_3 \geq 1000,}
+\]
+In other words:
+\[
+A_{\mathrm{ren}}\, X = -(r_1 + r_2 + r_3) \leq -1000.
+\]
+with : 
+\[
+A_{\mathrm{ren}} =
+\begin{bmatrix}
+0 & \cdots & 0 & -1 & -1 & -1 & 0 & 0 & 0
+\end{bmatrix}
+  and
+\qquad
+b_{\mathrm{ren}} = -1000.
+\]
+\subsubsection{Carbon emission constraints}
+
+Each unit transported generates \(0.05\) tonnes of carbon.
+The emissions of each center are therefore:
+\[
+\begin{aligned}
+c_1 &= 0.05\,(x_{11} + x_{12} + x_{13}), \\
+c_2 &= 0.05\,(x_{21} + x_{22} + x_{23}), \\
+c_3 &= 0.05\,(x_{31} + x_{32} + x_{33}).
+\end{aligned}
+\]
+
+The total amount of emissions must not exceed \(300\) tonnes:
+\[
+\boxed{c_1 + c_2 + c_3 \leq 300,}
+\]
+so 
+\[
+A_{\mathrm{CO_2}} =
+\begin{pmatrix}
+0 & \cdots & 0 & 1 & 1 & 1
+\end{pmatrix} 
+and
+\qquad
+b_{\mathrm{CO_2}} = 300.
+\]
+
+\subsection{Matrix reformulation of the problem}
+
+By grouping all the previous constraints, the problem can be reformulated
+in the standard form of a linear programming problem:
+\[
+\boxed{
+\begin{aligned}
+\min_{X} \quad & f^{\top} X \\
+\text{subject to} \quad
+& A\, X \leq b, \\
+& A_{\mathrm{eq}}\, X = b_{\mathrm{eq}}, \\
+& X \geq 0,
+\end{aligned}
+}
+\]
+where \(X \in \mathbb{R}^{18}\) is the vector of decision variables defined
+previously and \(f \in \mathbb{R}^{18}\) is the vector of objective function
+coefficients.
+
+The matrix \(A\) gathers the inequality constraints: capacity, working
+hours, renewable energy, and carbon emissions. The matrix
+\(A_{\mathrm{eq}}\) gathers the equality constraints: demand satisfaction and
+the relations defining carbon emissions. We thus have:
+\[
+A =
+\begin{pmatrix}
+A_{\mathrm{cap}} \\
+A_{\mathrm{lab}} \\
+A_{\mathrm{ren}} \\
+A_{\mathrm{CO_2}}
+\end{pmatrix},
+\qquad
+b =
+\begin{pmatrix}
+b_{\mathrm{cap}} \\
+b_{\mathrm{lab}} \\
+b_{\mathrm{ren}} \\
+b_{\mathrm{CO_2}}
+\end{pmatrix},
+\]
+and, similarly,
+\[
+A_{\mathrm{eq}} =
+\begin{pmatrix}
+A_{\mathrm{dem}} \\
+A_{\mathrm{em}}
+\end{pmatrix},
+\qquad
+b_{\mathrm{eq}} =
+\begin{pmatrix}
+b_{\mathrm{dem}} \\
+0_{3 \times 1}
+\end{pmatrix}.
+\]
+
+with :
+\[
+A_{\mathrm{em}} =
+\begin{bmatrix}
+-0{,}05 & -0{,}05 & -0{,}05 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \cdots & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & -0{,}05 & -0{,}05 & -0{,}05 & 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & -0{,}05 & -0{,}05 & -0{,}05 & 0 & \cdots & 0 & 0 & 0 & 1
+\end{bmatrix}
+and 
+\qquad
+b_{\mathrm{em}} =
+\begin{pmatrix}
+0 \\ 0 \\ 0
+\end{pmatrix}
+\]
