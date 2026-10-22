@@ -1,0 +1,80 @@
+Deriving by hand, the process to find the gradient and the Hessian Matrix is demostrated below: 
+
+ $ f(x,y) = \frac{1}{2}(x-1)^2 +\frac{1}{2}(10(y-x^2))^2 + \frac{1}{2}y^2 $
+\newline
+Simplifying: 
+
+ $ f(x,y) = \frac{1}{2}(x-1)^2 +50(y-x^2)^2 + \frac{1}{2}y^2 $
+\newline
+\\
+Gradient:
+\[
+\nabla f(x,y) =
+\begin{pmatrix}
+\frac{\partial f}{\partial x}\\\\
+\frac{\partial f}{\partial y}
+\end{pmatrix}
+\]
+
+Deriving each part of $ f(x,y)$ in terms of x:
+\newline
+
+    $\frac{\partial}{\partial x}(\frac{1}{2}(x-1)^2) = x-1$
+\newline
+
+By the chainrule:
+
+    $\frac{\partial}{\partial x}(50(y-x^2)^2) = 50*2(y-x^2)(-2x)$
+\newline
+
+    $\frac{\partial}{\partial x}(\frac{1}{2}y^2) = 0$
+\newline
+
+Which sums up to:
+\[
+{\frac{\partial}{\partial x}f(x,y) = 200x^3-200xy+x-1}
+\]
+\newline
+
+Now deriving each part of $ f(x,y)$ in terms of y:
+\newline
+
+    $\frac{\partial}{\partial y}(\frac{1}{2}(x-1)^2) = 0$
+\newline
+
+    $\frac{\partial}{\partial y}(50(y-x^2)^2) = 100(y-x^2)$
+\newline
+
+    $\frac{\partial}{\partial y}(\frac{1}{2}y^2) = y$
+\newline
+
+Which sums up to:
+\[
+{\frac{\partial}{\partial x}f(x,y) = -100x^2+101y}
+\]
+
+\[
+\nabla f(x,y) =
+\begin{pmatrix}
+200x^3-200xy+x-1\\\\
+-100x^2+101y
+\end{pmatrix}
+\]
+\newline
+\\A similar process is taken to obtain the Hessian matrix:
+\[
+H(x,y) =
+\begin{pmatrix}
+fxx&fxy\\\\
+fyx&fyy
+\end{pmatrix}
+\]
+$fxx=1-200y+600x^2;\\fxy=-200x;\\fyx=-200x;\\  fyy=101.$
+
+\[
+H(x,y) =
+\begin{pmatrix}
+1-200y+600x^2&-200x\\\\
+-200x&101
+\end{pmatrix}
+\]
